@@ -233,11 +233,8 @@ public class SkillSystem {
 
             // ── MAGE ─────────────────────────────────────────────────────────
             case "fireball" -> {
-                // 1.21.1: SmallFireball(EntityType, LivingEntity, Vec3, Level)
                 net.minecraft.world.phys.Vec3 dir = player.getViewVector(1.0f).normalize();
-                SmallFireball fb = new SmallFireball(
-                    net.minecraft.world.entity.EntityType.SMALL_FIREBALL,
-                    player, dir, player.level());
+                SmallFireball fb = new SmallFireball(player.level(), player, dir);
                 player.level().addFreshEntity(fb);
                 player.sendSystemMessage(Component.literal("§cFireball!"));
             }
