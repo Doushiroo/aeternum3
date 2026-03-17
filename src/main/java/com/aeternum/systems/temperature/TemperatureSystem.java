@@ -95,7 +95,7 @@ public class TemperatureSystem {
         switch (data.getTemperatureStatus()) {
             case HEAT_STROKE -> {
                 player.addEffect(new MobEffectInstance(MobEffects.WEAKNESS, 100, 1, false, false));
-                player.addEffect(new MobEffectInstance(MobEffects.NAUSEA, 100, 0, false, false));
+                player.addEffect(new MobEffectInstance(MobEffects.CONFUSION, 100, 0, false, false));
                 if (player.tickCount % 40 == 0) {
                     player.hurt(player.damageSources().generic(), 1.0f);
                     player.sendSystemMessage(Component.literal("§c⚠ Heat Stroke! Find shade and water!"));
@@ -106,14 +106,14 @@ public class TemperatureSystem {
                 player.addEffect(new MobEffectInstance(MobEffects.DIG_SLOWDOWN, 100, 0, false, false));
             }
             case HOT -> {
-                player.addEffect(new MobEffectInstance(MobEffects.SLOWNESS, 100, 0, false, false));
+                player.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SLOWDOWN, 100, 0, false, false));
             }
             case COLD -> {
-                player.addEffect(new MobEffectInstance(MobEffects.SLOWNESS, 100, 0, false, false));
+                player.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SLOWDOWN, 100, 0, false, false));
             }
             case HYPOTHERMIA -> {
                 player.addEffect(new MobEffectInstance(MobEffects.WEAKNESS, 100, 0, false, false));
-                player.addEffect(new MobEffectInstance(MobEffects.SLOWNESS, 100, 1, false, false));
+                player.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SLOWDOWN, 100, 1, false, false));
                 if (player.tickCount % 60 == 0) {
                     player.hurt(player.damageSources().generic(), 0.5f);
                     player.sendSystemMessage(Component.literal("§9⚠ Hypothermia! Find warmth immediately!"));
@@ -121,7 +121,7 @@ public class TemperatureSystem {
             }
             case FROSTBITE -> {
                 player.addEffect(new MobEffectInstance(MobEffects.WEAKNESS, 100, 2, false, false));
-                player.addEffect(new MobEffectInstance(MobEffects.SLOWNESS, 100, 2, false, false));
+                player.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SLOWDOWN, 100, 2, false, false));
                 if (player.tickCount % 30 == 0) {
                     player.hurt(player.damageSources().generic(), 1.0f);
                     player.sendSystemMessage(Component.literal("§b⚠ Frostbite! You are freezing to death!"));

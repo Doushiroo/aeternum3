@@ -127,7 +127,7 @@ public class SkillSystem {
             case "shield_bash" -> {
                 LivingEntity t = nearest(player, 4);
                 if (t != null) {
-                    t.addEffect(new MobEffectInstance(MobEffects.SLOWNESS, 40, 255));
+                    t.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SLOWDOWN, 40, 255));
                     t.hurt(player.damageSources().playerAttack(player), (float)data.getPhysicalAttack());
                     player.sendSystemMessage(Component.literal("§aShield Bash! Enemy stunned!"));
                 } else noTarget(player, data, skill);
@@ -152,7 +152,7 @@ public class SkillSystem {
             case "titan_rage" -> {
                 player.addEffect(new MobEffectInstance(MobEffects.DAMAGE_BOOST, 400, 3));
                 player.addEffect(new MobEffectInstance(MobEffects.DAMAGE_RESISTANCE, 400, 2));
-                player.addEffect(new MobEffectInstance(MobEffects.SPEED, 400, 1));
+                player.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SPEED, 400, 1));
                 player.sendSystemMessage(Component.literal("§4§lTITAN RAGE!"));
             }
             case "war_charge" -> {
@@ -168,7 +168,7 @@ public class SkillSystem {
 
             // ── BERSERKER ────────────────────────────────────────────────────
             case "frenzy" -> {
-                player.addEffect(new MobEffectInstance(MobEffects.SPEED, 240, 1));
+                player.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SPEED, 240, 1));
                 player.addEffect(new MobEffectInstance(MobEffects.DAMAGE_BOOST, 240, 1));
                 player.sendSystemMessage(Component.literal("§cFrenzy!"));
             }
@@ -233,11 +233,11 @@ public class SkillSystem {
 
             // ── MAGE ─────────────────────────────────────────────────────────
             case "fireball" -> {
-                // SmallFireball(Level, LivingEntity, double offX, double offY, double offZ)
-                var dir = player.getViewVector(1.0f).normalize();
-                SmallFireball fb = new SmallFireball(player.level(), player,
-                    dir.x, dir.y, dir.z);
-                fb.setPos(player.getX() + dir.x * 1.5, player.getEyeY(), player.getZ() + dir.z * 1.5);
+                // 1.21.1: SmallFireball(EntityType, LivingEntity, Vec3, Level)
+                net.minecraft.world.phys.Vec3 dir = player.getViewVector(1.0f).normalize();
+                SmallFireball fb = new SmallFireball(
+                    net.minecraft.world.entity.EntityType.SMALL_FIREBALL,
+                    player, dir, player.level());
                 player.level().addFreshEntity(fb);
                 player.sendSystemMessage(Component.literal("§cFireball!"));
             }
@@ -255,7 +255,7 @@ public class SkillSystem {
                 LivingEntity t = nearest(player, 15);
                 if (t != null) {
                     t.hurt(player.damageSources().playerAttack(player), (float)(data.getMagicAttack() * 1.8));
-                    t.addEffect(new MobEffectInstance(MobEffects.SLOWNESS, 100, 2));
+                    t.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SLOWDOWN, 100, 2));
                     player.sendSystemMessage(Component.literal("§bIce Lance!"));
                 } else noTarget(player, data, skill);
             }
@@ -270,7 +270,7 @@ public class SkillSystem {
             case "time_stop" -> {
                 player.level().getEntitiesOfClass(LivingEntity.class, player.getBoundingBox().inflate(25))
                     .stream().filter(e -> e != player)
-                    .forEach(e -> e.addEffect(new MobEffectInstance(MobEffects.SLOWNESS, 100, 255)));
+                    .forEach(e -> e.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SLOWDOWN, 100, 255)));
                 player.sendSystemMessage(Component.literal("§b§lTIME STOP!"));
             }
 
@@ -346,14 +346,14 @@ public class SkillSystem {
                 player.sendSystemMessage(Component.literal("§6Bear Form!"));
             }
             case "cat_form" -> {
-                player.addEffect(new MobEffectInstance(MobEffects.SPEED, 200, 1));
+                player.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SPEED, 200, 1));
                 player.addEffect(new MobEffectInstance(MobEffects.INVISIBILITY, 20, 0));
                 player.sendSystemMessage(Component.literal("§aCat Form!"));
             }
             case "entangle" -> {
                 player.level().getEntitiesOfClass(LivingEntity.class, player.getBoundingBox().inflate(6))
                     .stream().filter(e -> e != player)
-                    .forEach(e -> e.addEffect(new MobEffectInstance(MobEffects.SLOWNESS, 80, 255)));
+                    .forEach(e -> e.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SLOWDOWN, 80, 255)));
                 player.sendSystemMessage(Component.literal("§2Entangle!"));
             }
             case "regrowth" -> {
@@ -491,7 +491,7 @@ public class SkillSystem {
             case "dissonance" -> {
                 player.level().getEntitiesOfClass(LivingEntity.class, player.getBoundingBox().inflate(10))
                     .stream().filter(e -> e != player)
-                    .forEach(e -> e.addEffect(new MobEffectInstance(MobEffects.NAUSEA, 200, 0)));
+                    .forEach(e -> e.addEffect(new MobEffectInstance(MobEffects.CONFUSION, 200, 0)));
                 player.sendSystemMessage(Component.literal("§dDissonance! Enemies confused!"));
             }
             case "healing_hymn" -> {
@@ -508,7 +508,7 @@ public class SkillSystem {
                     .forEach(p -> {
                         p.addEffect(new MobEffectInstance(MobEffects.DAMAGE_BOOST, 900, 1));
                         p.addEffect(new MobEffectInstance(MobEffects.DAMAGE_RESISTANCE, 900, 1));
-                        p.addEffect(new MobEffectInstance(MobEffects.SPEED, 900, 1));
+                        p.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SPEED, 900, 1));
                         p.addEffect(new MobEffectInstance(MobEffects.REGENERATION, 900, 1));
                     });
                 player.sendSystemMessage(Component.literal("§d§lBALLAD OF HEROES!"));
